@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpsMind — AI Operations Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">OM</div>
+    <div>
+      <h1>OpsMind</h1>
+      <p>Voice-enabled AI operations assistant — Flask · RAG · LLM · time-series</p>
+    </div>
+  </div>
+  <div id="backends" class="backends"></div>
+</header>
+
+<main>
+  <!-- ============ live metrics ============ -->
+  <section class="card span-2">
+    <div class="card-head">
+      <h2>Live telemetry</h2>
+      <div class="controls">
+        <select id="device"></select>
+        <select id="metric"></select>
+        <select id="hours">
+          <option value="12">12h</option>
+          <option value="24" selected>24h</option>
+          <option value="48">48h</option>
+          <option value="72">72h</option>
+        </select>
+      </div>
+    </div>
+    <div class="chart-wrap"><canvas id="chart"></canvas><div id="tip" class="tip"></div></div>
+    <div id="stats" class="stats"></div>
+  </section>
+
+  <!-- ============ anomalies ============ -->
+  <section class="card">
+    <div class="card-head">
+      <h2>Detected anomalies</h2>
+      <span class="hint">rolling z-score + documented limits</span>
+    </div>
+    <div id="anomalies" class="anomalies"><div class="empty">Loading…</div></div>
+  </section>
+
+  <!-- ============ ask / voice ============ -->
+  <section class="card span-2">
+    <div class="card-head">
+      <h2>Ask the assistant</h2>
+      <span class="hint">answers are grounded in the maintenance knowledge base + live data</span>
+    </div>
+
+    <div class="ask-row">
+      <input id="question" type="text" autocomplete="off"
+             placeholder="e.g. why is LINE-B running hot, and what should the operator do?">
+      <button id="mic" class="mic" title="Hold a question — click to speak">🎙</button>
+      <button id="askBtn" class="primary">Ask</button>
+    </div>
+
+    <div class="suggestions">
+      <button class="chip">What should we do if LINE-B is overheating?</button>
+      <button class="chip">What is the vibration warning limit for PUMP-07?</button>
+      <button class="chip">Is LINE-B bearing wear or looseness?</button>
+      <button class="chip">Any anomalies in the last 24 hours?</button>
+    </div>
+
+    <div id="answer" class="answer hidden"></div>
+  </section>
+
+  <!-- ============ AI report ============ -->
+  <section class="card span-3">
+    <div class="card-head">
+      <h2>AI analytical report</h2>
+      <div class="controls">
+        <select id="reportHours">
+          <option value="24" selected>Last 24h</option>
+          <option value="48">Last 48h</option>
+          <option value="72">Last 72h</option>
+        </select>
+        <button id="reportBtn" class="primary">Generate report</button>
+      </div>
+    </div>
+    <div id="report" class="report"><div class="empty">No report generated yet.</div></div>
+  </section>
+</main>
+
+<footer>
+  <span id="footnote"></span>
+  <a href="/api/health" target="_blank">/api/health</a>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
